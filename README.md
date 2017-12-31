@@ -1,10 +1,5 @@
 # Associate users with permissions and roles
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-permission.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-permission)
-[![Build Status](https://img.shields.io/travis/spatie/laravel-permission/master.svg?style=flat-square)](https://travis-ci.org/spatie/laravel-permission)
-[![StyleCI](https://styleci.io/repos/42480275/shield)](https://styleci.io/repos/42480275)
-[![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-permission.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-permission)
-
 * [Installation](#installation)
 * [Usage](#usage)
   * [Using "direct" permissions](#using-direct-permissions-see-below-to-use-both-roles-and-permissions)
@@ -19,17 +14,18 @@
 * [Cache](#cache)
 
 This package allows you to manage user permissions and roles in a database.
+It's based on [Spatie](https://github.com/spatie/laravel-permission) package and that is why the namespace has his name and I kept all the referenced to their site: I just modded the package, they are the one to thank for the initial work.
 
 Once installed you can do stuff like this:
 
 ```php
 // Adding permissions to a user
-$user->givePermissionTo('edit articles');
+$user->givePermissionTo('edit-articles');
 
 // Adding permissions via a role
 $user->assignRole('writer');
 
-$role->givePermissionTo('edit articles');
+$role->givePermissionTo('edit-articles');
 ```
 
 If you're using multiple guards we've got you covered as well. Every guard will have its own set of permissions and roles that can be assigned to the guard's users. Read about it in the [using multiple guards](#using-multiple-guards) section of the readme.
@@ -37,11 +33,11 @@ If you're using multiple guards we've got you covered as well. Every guard will 
 Because all permissions will be registered on [Laravel's gate](https://laravel.com/docs/5.5/authorization), you can test if a user has a permission with Laravel's default `can` function:
 
 ```php
-$user->can('edit articles');
+$user->can('edit-articles');
 ```
 
-Spatie is a web design agency in Antwerp, Belgium. You'll find an overview of all
-our open source projects [on our website](https://spatie.be/opensource).
+Spatie is a web design agency in Antwerp, Belgium. You'll find an overview of all 
+their open source projects [on our website](https://spatie.be/opensource).I work at Dreamonkey Srl, a startup in Scandiano, Italy, as backend and Android developer. You can find a description of who we are [on our website](https://www.dreamonkey.com/) (still no english translation, though).
 
 ## Installation
 
@@ -52,10 +48,23 @@ our open source projects [on our website](https://spatie.be/opensource).
 
 This package can be used in Laravel 5.4 or higher. If you are using an older version of Laravel, take a look at [the v1 branch of this package](https://github.com/spatie/laravel-permission/tree/v1).
 
-You can install the package via composer:
+You can install the package via composer.
+Being a modded version, it's not present on packagist for now; for this reason you have to manually add the repository to the composer.json file and then add the require line.
 
 ``` bash
-composer require spatie/laravel-permission
+    ...
+    "repositories": [
+        ...
+        {
+            "type": "vcs",
+            "url": "https://github.com/IlCallo/laravel-permission"
+        }
+    ],
+    "require": {
+        ...
+        "spatie/laravel-permission": "^2.2.0"
+        ...
+    }
 ```
 
 In Laravel 5.5 the service provider will automatically get registered. In older versions of the framework just add the service provider in `config/app.php` file:
@@ -233,7 +242,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
 $role = Role::create(['name' => 'writer']);
-$permission = Permission::create(['name' => 'edit articles']);
+$permission = Permission::create(['name' => 'edit-articles']);
 ```
 
 If you're using multiple guards the `guard_name` attribute needs to be set as well. Read about it in the [using multiple guards](#using-multiple-guards) section of the readme.
@@ -272,19 +281,16 @@ The scope can accept a string, a `\Spatie\Permission\Models\Permission` object o
 A permission can be given to any user:
 
 ```php
-$user->givePermissionTo('edit articles');
+$user->givePermissionTo('edit-articles');
 
-// You can also give multiple permission at once
-$user->givePermissionTo('edit articles', 'delete articles');
-
-// You may also pass an array
-$user->givePermissionTo(['edit articles', 'delete articles']);
+// You can also give multiple permission at once using an array
+$user->givePermissionTo(['edit-articles', 'delete-articles']);
 ```
 
 A permission can be revoked from a user:
 
 ```php
-$user->revokePermissionTo('edit articles');
+$user->revokePermissionTo('edit-articles');
 ```
 
 Or revoke & add new permissions in one go:
@@ -296,7 +302,7 @@ $user->syncPermissions(['edit articles', 'delete articles']);
 You can test if a user has a permission:
 
 ```php
-$user->hasPermissionTo('edit articles');
+$user->hasPermissionTo('edit-articles');
 ```
 
 ...or if a user has multiple permissions:
@@ -309,7 +315,7 @@ Saved permissions will be registered with the `Illuminate\Auth\Access\Gate` clas
 test if a user has a permission with Laravel's default `can` function:
 
 ```php
-$user->can('edit articles');
+$user->can('edit-articles');
 ```
 
 ### Using permissions via roles
@@ -362,19 +368,19 @@ The `assignRole`, `hasRole`, `hasAnyRole`, `hasAllRoles`  and `removeRole` funct
 A permission can be given to a role:
 
 ```php
-$role->givePermissionTo('edit articles');
+$role->givePermissionTo('edit-articles');
 ```
 
 You can determine if a role has a certain permission:
 
 ```php
-$role->hasPermissionTo('edit articles');
+$role->hasPermissionTo('edit-articles');
 ```
 
 A permission can be revoked from a role:
 
 ```php
-$role->revokePermissionTo('edit articles');
+$role->revokePermissionTo('edit-articles');
 ```
 
 The `givePermissionTo` and `revokePermissionTo` functions can accept a
@@ -387,17 +393,17 @@ For instance:
 
 ```php
 $role = Role::findByName('writer');
-$role->givePermissionTo('edit articles');
+$role->givePermissionTo('edit-articles');
 
 $user->assignRole('writer');
 
-$user->givePermissionTo('delete articles');
+$user->givePermissionTo('delete-articles');
 ```
 
 In the above example, a role is given permission to edit articles and this role is assigned to a user. 
 Now the user can edit articles and additionally delete articles. The permission of 'delete articles' is the user's direct permission because it is assigned directly to them.
-When we call `$user->hasDirectPermission('delete articles')` it returns `true`, 
-but `false` for `$user->hasDirectPermission('edit articles')`.
+When we call `$user->hasDirectPermission('delete-articles')` it returns `true`, 
+but `false` for `$user->hasDirectPermission('edit-articles')`.
 
 This method is useful if one builds a form for setting permissions for roles and users in an application and wants to restrict or change inherited permissions of roles of the user, i.e. allowing to change only direct permissions of the user.
 
@@ -418,6 +424,42 @@ All these responses are collections of `Spatie\Permission\Models\Permission` obj
 
 If we follow the previous example, the first response will be a collection with the `delete article` permission and 
 the second will be a collection with the `edit article` permission and the third will contain both.
+
+### Using permissions and roles with scopes
+
+If a scope is not explicitly specified, all methods will operate on a not scoped level, which means that a user's roles
+and permissions are valid per user.
+
+To grant permissions to a user related to a resource (eg. ability to edit all articles produced by a single department)
+it's possible to "scope" the permissions and roles to a particular model, which must implement the `Restrictable` 
+interface. A default implementation based on the Eloquent `Model` class can be added to your model(s) with 
+the `RestrictableTrait`.
+
+To scope permissions and roles, a `Restrictable` instance can be provided as second parameter to all the methods
+which grant, revoke, sync or get permissions or roles.
+
+```php
+$role->givePermissionTo('edit-articles');
+
+$user->assignRole('writer', $department);
+
+$user->givePermissionTo('delete-articles', $department);
+
+$user->syncRoles(['writer', 'admin'], $department);
+
+// Scoped direct permissions
+$user->getDirectPermissions($department)
+
+// Permissions inherited from user's scoped roles
+$user->getPermissionsViaRoles($department);
+
+// All permissions which apply on the user for the given department
+$user->getAllPermissions($department);
+
+$user->can('edit-articles', $departement);
+```
+
+Do note that Roles and Permissions can be scoped, but scoped permissions assigned to a role are not currently supported.
 
 ### Using Blade directives
 This package also adds Blade directives to verify whether the currently logged in user has all or any of a given list of roles. 
@@ -529,6 +571,12 @@ You can use all of the blade directives listed in [using blade directives](#usin
     I am not a super-admin...
 @endrole
 ```
+
+### Using blade directives with scoped roles
+
+To use Blade directives with scoped roles, parameters to provide are `role_name, guard_name, restrictable_fully_qualified_class, restrictable_id`.
+Most of the time, you want to provide a null `guard_name`, while `restrictable_fully_qualified_class` and 
+`restrictable_id` must both be not null, or they will be ignored.
 
 ## Using a middleware
 
@@ -685,10 +733,9 @@ php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvid
   
   And update the `models.role` and `models.permission` values
 
+### Cache
 
-## Cache
-
-Role and Permission data are cached to speed up performance.
+If you manipulate unscoped permission/role data directly in the database instead of calling the supplied methods, then you will not see the changes reflected in the application, because unscoped role and permission data is cached to speed up performance.
 
 When you use the supplied methods for manipulating roles and permissions, the cache is automatically reset for you:
 
@@ -696,8 +743,8 @@ When you use the supplied methods for manipulating roles and permissions, the ca
 $user->assignRole('writer');
 $user->removeRole('writer');
 $user->syncRoles(params);
-$role->givePermissionTo('edit articles');
-$role->revokePermissionTo('edit articles');
+$role->givePermissionTo('edit-articles');
+$role->revokePermissionTo('edit-articles');
 $role->syncPermissions(params);
 ```
 
@@ -741,20 +788,23 @@ If you discover any security-related issues, please email [freek@spatie.be](mail
 
 ## Postcardware
 
-You're free to use this package, but if it makes it to your production environment we highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using.
+You're free to use this package (it's [MIT-licensed](LICENSE.md)), but if it makes it to your production environment Spatie highly appreciate you sending them a postcard from your hometown, mentioning which of their package(s) you are using.
 
-Our address is: Spatie, Samberstraat 69D, 2060 Antwerp, Belgium.
+Their address is: Spatie, Samberstraat 69D, 2060 Antwerp, Belgium.
 
-We publish all received postcards [on our company website](https://spatie.be/en/opensource/postcards).
+All received postcards are published [on their website](https://spatie.be/en/opensource/postcards).
+
+If you also wanna send a postcard to us, we appreciate it too.
+
+Our address is: Dreamonkey Srl, Via Mazzacurati 3/B, Scandiano 42019, RE, Italy.
 
 ## Credits
 
+- [Spatie](https://github.com/spatie)
 - [Freek Van der Herten](https://github.com/freekmurze)
 - [All Contributors](../../contributors)
 
-This package is heavily based on [Jeffrey Way](https://twitter.com/jeffrey_way)'s awesome [Laracasts](https://laracasts.com) lessons
-on [permissions and roles](https://laracasts.com/series/whats-new-in-laravel-5-1/episodes/16). His original code
-can be found [in this repo on GitHub](https://github.com/laracasts/laravel-5-roles-and-permissions-demo).
+This package is a modded version of Spatie one, which is in turn heavily based on [Jeffrey Way](https://twitter.com/jeffrey_way)'s awesome [Laracasts](https://laracasts.com) lessons on [permissions and roles](https://laracasts.com/series/whats-new-in-laravel-5-1/episodes/16). His original code can be found [in this repo on GitHub](https://github.com/laracasts/laravel-5-roles-and-permissions-demo).
 
 Special thanks to [Alex Vanderbist](https://github.com/AlexVanderbist) who greatly helped with `v2`, and to [Chris Brown](https://github.com/drbyte) for his longtime support  helping us maintain the package.
 
@@ -764,7 +814,10 @@ Special thanks to [Alex Vanderbist](https://github.com/AlexVanderbist) who great
 
 ## Alternatives
 
-[Povilas Korop](https://twitter.com/@povilaskorop) did an excellent job listing the alternatives [in an article on Laravel News](https://laravel-news.com/two-best-roles-permissions-packages). In that same article, he compares laravel-permission to [Joseph Silber](https://github.com/JosephSilber)'s [Bouncer]((https://github.com/JosephSilber/bouncer)), which in our book is also an excellent package.
+- [JosephSilber/bouncer](https://github.com/JosephSilber/bouncer)
+- [Zizaco/entrust](https://github.com/Zizaco/entrust)
+- [bican/roles](https://github.com/romanbican/roles)
+- [spatie/laravel-permission](https://github.com/spatie/laravel-permission)
 
 ## Support us
 
@@ -772,6 +825,10 @@ Spatie is a web design agency based in Antwerp, Belgium. You'll find an overview
 
 Does your business depend on our contributions? Reach out and support us on [Patreon](https://www.patreon.com/spatie). 
 All pledges will be dedicated to allocating workforce on maintenance and new awesome stuff.
+
+## About me and Dreamonkey
+
+I work at Dreamonkey Srl, a startup in Scandiano, Italy, as backend and Android developer. You can find a description of who we are [on our website](https://www.dreamonkey.com/) (still no english translation, though).
 
 ## License
 

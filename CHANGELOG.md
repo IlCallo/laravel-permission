@@ -66,8 +66,12 @@ The 403 response is backward compatible
 ## 2.3.0 - 2017-07-25
 - add `create-permission` and `create-role` commands
 
-## 2.2.0 - 2017-07-01
+## 2.2.1 - 2017-07-01
 - `hasanyrole` and `hasallrole` can accept multiple roles
+
+## 2.2.0 - 2017-05-08
+- added the ability to scope permissions and role against a model implementing the `Restrictable` interface
+- it's no more possible to give multiple permissions and roles as multiple parameters
 
 ## 2.1.6 - 2017-06-06
 - fixed a bug where `hasPermissionTo` wouldn't use the right guard name
